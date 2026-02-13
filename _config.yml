@@ -1,0 +1,96 @@
+# Site
+repository: zhiyi-zhang-duke/jackz-resume-page
+
+# Content configuration version
+version: 2
+
+# Personal info
+name: Jack Zhang
+title: Software Engineer
+email: jack.zhang@example.com
+website: https://zhiyi-zhang-duke.github.io/jackz-resume-page
+
+# Dark Mode (true/false/never)
+darkmode: false
+
+# Social links
+github_username: zhiyi-zhang-duke
+linkedin_username: jackzhang
+
+# About Section
+about_profile_image: images/profile.jpg
+about_content: |
+  Hi, my name is Jack Zhang and I'm a software engineer. I have experience building
+  web applications and working with modern development tools and frameworks.
+
+  I am passionate about writing clean, maintainable code and enjoy tackling challenging
+  technical problems.
+
+content:
+  - title: Projects
+    layout: list
+    content:
+      - layout: left
+        border: weak
+        title: Resume Page
+        link: https://zhiyi-zhang-duke.github.io/jackz-resume-page
+        link_text: jackz-resume-page
+        additional_links:
+          - title: GitHub repo
+            icon: fab fa-github
+            url: https://github.com/zhiyi-zhang-duke/jackz-resume-page
+        quote: >
+          A personal resume website built with Jekyll and GitHub Pages.
+        description: |
+          Built using the modern-resume-theme Jekyll template, hosted on GitHub Pages.
+
+  - title: Experience
+    layout: list
+    content:
+      - layout: right
+        title: Company Name
+        sub_title: Software Engineer
+        caption: January 2023 - Present
+        description: |
+          Developed and maintained web applications using modern frameworks and tools.
+          Collaborated with cross-functional teams to deliver high-quality software solutions.
+
+      - layout: right
+        title: Previous Company
+        sub_title: Junior Developer
+        caption: June 2021 - December 2022
+        description: |
+          Contributed to full-stack development projects. Participated in code reviews
+          and helped improve development processes.
+
+  - title: Education
+    layout: list
+    content:
+      - layout: top-right
+        title: Duke University
+        sub_title: Bachelor of Science in Computer Science
+        caption: 2017 - 2021
+        description: |
+          Studied computer science with a focus on software engineering and data structures.
+
+  - title: Skills
+    layout: text
+    content: |
+      **Languages:** Python, JavaScript, TypeScript, Java, C++
+
+      **Frameworks:** React, Node.js, Django, Flask
+
+      **Tools:** Git, Docker, AWS, CI/CD
+
+# Footer
+footer_show_references: true
+
+# Build settings
+remote_theme: sproogen/modern-resume-theme
+
+sass:
+  sass_dir: _sass
+  style: compressed
+
+plugins:
+  - jekyll-seo-tag
