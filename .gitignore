@@ -1,4 +1,5 @@
 *.pdf
+/profile.jfif
 _site/
 .sass-cache/
 .jekyll-cache/

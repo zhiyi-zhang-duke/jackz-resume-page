@@ -8,7 +8,6 @@ version: 2
 name: Jack Zhang
 title: Senior Software Engineer
 email: zhiyi.zhang.duke@gmail.com
-phone: "(402) 202-2831"
 website: https://zhiyi-zhang-duke.github.io/jackz-resume-page
 
 # Dark Mode (true/false/never)
@@ -18,7 +17,7 @@ darkmode: false
 github_username: zhiyi-zhang-duke
 
 # About Section
-# about_profile_image: images/profile.jpg
+about_profile_image: images/profile.jfif
 about_content: |
   Senior Full-stack Software Engineer with 10+ years building distributed, event-driven systems and internal
   platforms. Deep experience designing scalable data pipelines, developer tooling, and observability-first
