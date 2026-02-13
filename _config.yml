@@ -6,8 +6,9 @@ version: 2
 
 # Personal info
 name: Jack Zhang
-title: Software Engineer
-email: jack.zhang@example.com
+title: Senior Software Engineer
+email: zhiyi.zhang.duke@gmail.com
+phone: "(402) 202-2831"
 website: https://zhiyi-zhang-duke.github.io/jackz-resume-page
 
 # Dark Mode (true/false/never)
@@ -15,72 +16,126 @@ darkmode: false
 
 # Social links
 github_username: zhiyi-zhang-duke
-linkedin_username: jackzhang
 
 # About Section
-about_profile_image: images/profile.jpg
+# about_profile_image: images/profile.jpg
 about_content: |
-  Hi, my name is Jack Zhang and I'm a software engineer. I have experience building
-  web applications and working with modern development tools and frameworks.
-
-  I am passionate about writing clean, maintainable code and enjoy tackling challenging
-  technical problems.
+  Senior Full-stack Software Engineer with 10+ years building distributed, event-driven systems and internal
+  platforms. Deep experience designing scalable data pipelines, developer tooling, and observability-first
+  services that support real-time analytics and AI-driven workflows. Led cross-team work in translation quality
+  evaluation, semantic retrieval, deployment automation, and internal tooling that improved developer
+  throughput and model-enabled product outcomes.
 
 content:
-  - title: Projects
-    layout: list
-    content:
-      - layout: left
-        border: weak
-        title: Resume Page
-        link: https://zhiyi-zhang-duke.github.io/jackz-resume-page
-        link_text: jackz-resume-page
-        additional_links:
-          - title: GitHub repo
-            icon: fab fa-github
-            url: https://github.com/zhiyi-zhang-duke/jackz-resume-page
-        quote: >
-          A personal resume website built with Jekyll and GitHub Pages.
-        description: |
-          Built using the modern-resume-theme Jekyll template, hosted on GitHub Pages.
-
   - title: Experience
     layout: list
     content:
       - layout: right
-        title: Company Name
-        sub_title: Software Engineer
-        caption: January 2023 - Present
+        title: Khan Academy
+        sub_title: Senior Software Engineer (Full Stack)
+        caption: May 2021 - Present
+        link: https://www.khanacademy.org
         description: |
-          Developed and maintained web applications using modern frameworks and tools.
-          Collaborated with cross-functional teams to deliver high-quality software solutions.
+          - **Evaluation & Quality Measurement:** Built a translation-quality asynchronous evaluation pipeline with adjudication workflows for Khan Academy international locales, enabling rapid iteration on prompts and pipelines; improved high quality AI translations from ~50% to 97.9%.
+          - **Semantic Retrieval:** Designed and shipped a production search pipeline with vector indexing and real-time query paths using Pinecone, improving user search clickthrough by 83%.
+          - **Deployment Automation & Reliability:** Implemented automated deployment workflows for content snapshot publish system, cutting deploy time from 3 hours to 45 minutes.
+          - **Developer Tooling:** Built internal tooling for prompt iteration that removed the need for production deploys to update internal prompts and increased prompt engineer iteration of prompts by 200%.
+          - **Cross-team Leadership:** Coordinated across multiple teams to align on evaluation criteria, launch milestones, and operational readiness; unblocked delivery of district sales for educational state standards presentation.
 
       - layout: right
-        title: Previous Company
-        sub_title: Junior Developer
-        caption: June 2021 - December 2022
+        title: SAS Institute
+        sub_title: Technical Consultant
+        caption: October 2017 - May 2021
+        link: https://www.sas.com
         description: |
-          Contributed to full-stack development projects. Participated in code reviews
-          and helped improve development processes.
+          - Participated in many all hands incident triage, reducing mean time to detection and supporting reliable operation of critical internal platforms.
+          - Built and maintained a self-service automation portal for ETL workflows (Flask, Docker).
+          - Improved reliability and performance of proprietary Python schedule tooling for large-scale batch pipelines; participated in on-call to triage SEVs and maintain high availability.
+          - Participated in weekly on-call rotation, following runbooks to triage high-severity time sensitive production incidents and uphold customer SLAs.
+
+      - layout: right
+        title: Fidelity Investments
+        sub_title: Software Engineer
+        caption: July 2013 - May 2017
+        link: https://www.fidelity.com
+        description: |
+          - Owned environment migrations and release operations across test/prod; mentored interns/new hires and led code reviews.
+          - Built automated UI test infrastructure (Selenium + Jenkins) and shipped features for a Java/Spring web app (SQL, Tomcat, Maven) in Agile collaboration with an offshore team.
+
+  - title: Research Collaboration
+    layout: list
+    content:
+      - layout: right
+        title: Duke University & scikit-learn
+        sub_title: Research Contributor
+        caption: 2025 - Present
+        description: |
+          - Collaborating with Duke University research fellows on submitting the novel SPLIT decision tree algorithm to the scikit-learn ecosystem.
+          - Supporting the adaptation of research code into scikit-learn-compatible formats, and assisting with pre-submission compliance, benchmarking, and testing practices.
 
   - title: Education
     layout: list
     content:
       - layout: top-right
         title: Duke University
-        sub_title: Bachelor of Science in Computer Science
-        caption: 2017 - 2021
-        description: |
-          Studied computer science with a focus on software engineering and data structures.
+        sub_title: Computer Science B.S. with Distinction
+        caption: 2009 - 2013
 
-  - title: Skills
+  - title: Projects
+    layout: list
+    content:
+      - layout: left
+        border: weak
+        title: Downforacross
+        link: https://downforacross.com
+        link_text: downforacross.com
+        additional_links:
+          - title: GitHub
+            icon: fab fa-github
+            url: https://github.com/downforacross/downforacross.com
+        description: |
+          Active contributor with multiple pull requests for downforacross.com, a cooperative crossword puzzle platform. As of December 2025, the repository has 314 stars.
+
+      - layout: left
+        border: weak
+        title: LocalHero
+        description: |
+          A VSCode extension that significantly optimizes the development process. By logging local development environment issues to a version-controlled JSON file, it expedites debugging and ensures a consistent development environment across teams.
+
+      - layout: left
+        border: weak
+        title: Play-money
+        description: |
+          A Python terminal simulation for stock trading using historical data from 1970 to 2021.
+
+  - title: Writing & Thought Leadership
     layout: text
     content: |
-      **Languages:** Python, JavaScript, TypeScript, Java, C++
+      Author of Medium blog on AI & LLM-enhanced development, covering topics like prompt engineering, tooling design, and production challenges in applied AI.
 
-      **Frameworks:** React, Node.js, Django, Flask
+  - title: Accolades
+    layout: text
+    content: |
+      - **Khan Academy Hackathon** (MCP server prototype for Khan Academy Kids video delivery) — Won "Most Ethical Hackathon Project" and 7 of 9 internal awards — Dec 2025
+      - **Distinguished Developer Award** — SAS Institute — Dec 2017
+      - **FIMT Excellence Award** — Fidelity Investments — Dec 2014
 
-      **Tools:** Git, Docker, AWS, CI/CD
+  - title: Technical Skills
+    layout: text
+    content: |
+      **Languages & Systems:** Python, Java, Go, TypeScript/JavaScript, Kotlin, SQL, Bash, Linux
+
+      **Distributed Systems & Infrastructure:** Docker, Kubernetes, AWS, GCP App Engine & Datastore, CI/CD, deployment automation, microservices
+
+      **Data & Backend:** PostgreSQL, GraphQL, Node.js, embeddings & vector search (Pinecone)
+
+      **Observability & Reliability:** Monitoring/observability, logging, metrics, dashboards, production incident triage
+
+      **LLM / ML (Applied):** LLM API integration (OpenAI, Gemini), prompt & tooling pipelines, evaluation design & harnesses, retrieval-augmented generation (RAG), dataset curation, red-teaming
+
+      **Frontend:** React, TypeScript, Vue, HTML/CSS
+
+      **Testing & Tooling:** Git, unit/integration testing (JUnit/Mockito), browser automation (Selenium), Jest, Cypress
 
 # Footer
 footer_show_references: true
