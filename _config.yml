@@ -15,6 +15,13 @@ darkmode: false
 
 # Social links
 github_username: zhiyi-zhang-duke
+linkedin_username: jack-zhang-43873327
+
+# Additional icon links
+additional_links:
+- title: Medium Blog
+  icon: fab fa-medium
+  url: https://medium.com/@zhiyi.zhang.duke
 
 # About Section
 about_profile_image: images/profile.jfif
