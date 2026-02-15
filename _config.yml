@@ -92,6 +92,18 @@ content:
     content:
       - layout: left
         border: weak
+        title: Promptodex
+        link: https://promptodex.web.app
+        link_text: promptodex.web.app
+        additional_links:
+          - title: GitHub
+            icon: fab fa-github
+            url: https://github.com/zhiyi-zhang-duke/promptodex
+        description: |
+          An anonymous AI prompt library with real-time search, tagging, and infinite scroll. Built with React, TypeScript, and Firebase. Features include flexible authentication modes (admin-only or public creation), one-click copy, and a dark-mode-first design optimized for developer workflows.
+
+      - layout: left
+        border: weak
         title: Downforacross
         link: https://downforacross.com
         link_text: downforacross.com
