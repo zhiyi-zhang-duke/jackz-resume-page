@@ -438,12 +438,24 @@ const DATA = {
   },
 };
 
-// ── Card image CDN ────────────────────────────────────────────
-function cardImageUrl(char, name) {
-  const slug = name.toLowerCase()
-    .replace(/[^a-z0-9\s]/g, '')
+// ── Card image URLs ───────────────────────────────────────────
+function slugify(name) {
+  return name.toLowerCase()
+    .replace(/-/g, '_')
+    .replace(/[^a-z0-9_\s]/g, '')
     .trim()
-    .replace(/\s+/g, '_');
+    .replace(/\s+/g, '_')
+    .replace(/_+/g, '_');
+}
+
+function localUrl(char, name) {
+  const slug = slugify(name);
+  if (char === 'relics') return `./assets/relics/${slug}.png`;
+  return `./assets/card_portraits/${char}/${slug}.png`;
+}
+
+function cdnUrl(char, name) {
+  const slug = slugify(name);
   if (char === 'relics') return `https://sts2json.untapped.gg/art/relics/${slug}.png`;
   return `https://sts2json.untapped.gg/art/card_portraits/${char}/${slug}.png`;
 }
@@ -537,8 +549,17 @@ function resolveChipImages(wrap) {
   wrap.querySelectorAll('.card-chip').forEach(chip => {
     const img = chip.querySelector('img');
     if (img && !img.src && chip._pendingName) {
-      img.src = cardImageUrl(char, chip._pendingName);
-      img.onerror = () => { img.style.display = 'none'; };
+      const name = chip._pendingName;
+      img.src = localUrl(char, name);
+      img.onerror = () => {
+        const fallback = cdnUrl(char, name);
+        if (img.src !== fallback) {
+          img.src = fallback;
+          img.onerror = () => { img.style.display = 'none'; };
+        } else {
+          img.style.display = 'none';
+        }
+      };
     }
   });
 }
