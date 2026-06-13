@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STS2 Tier Lists — Jack's Collective Rankings</title>
+  <style>
+    :root {
+      --bg:          #12111a;
+      --bg-card:     #1c1b27;
+      --bg-panel:    #161524;
+      --gold:        #f5c518;
+      --gold-glow:   rgba(245, 197, 24, 0.35);
+      --text:        #e0dff0;
+      --text-dim:    #6b6a80;
+
+      --s-bg: #e06c00; --s-fg: #fff;
+      --a-bg: #d4a017; --a-fg: #111;
+      --b-bg: #3a9e5f; --b-fg: #fff;
+      --c-bg: #2d6fba; --c-fg: #fff;
+      --d-bg: #555468; --d-fg: #ddd;
+      --f-bg: #b03a3a; --f-fg: #fff;
+
+      --ironclad:    #c0392b;
+      --silent:      #2ecc71;
+      --defect:      #3498db;
+      --regent:      #d4af37;
+      --necrobinder: #9b59b6;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    /* ── Header ── */
+    header {
+      background: linear-gradient(160deg, #0c0b17 0%, #1a1828 60%, #0c0b17 100%);
+      border-bottom: 2px solid var(--gold);
+      box-shadow: 0 4px 24px var(--gold-glow);
+      padding: 2.5rem 1rem 2rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 900;
+      color: var(--gold);
+      text-shadow: 0 0 32px var(--gold-glow);
+      letter-spacing: 0.08em;
+      margin-bottom: 0.4rem;
+    }
+
+    header p {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Tabs ── */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 1.25rem 1rem;
+      background: #0e0d1a;
+      border-bottom: 1px solid #2a2840;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .tab-btn {
+      padding: 0.55rem 1.4rem;
+      border-radius: 4px;
+      border: 2px solid transparent;
+      background: var(--bg-card);
+      color: var(--text-dim);
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+    }
+
+    .tab-btn:hover { color: var(--text); }
+
+    .tab-btn[data-char="ironclad"]    { border-color: var(--ironclad); }
+    .tab-btn[data-char="silent"]      { border-color: var(--silent); }
+    .tab-btn[data-char="defect"]      { border-color: var(--defect); }
+    .tab-btn[data-char="regent"]      { border-color: var(--regent); }
+    .tab-btn[data-char="necrobinder"] { border-color: var(--necrobinder); }
+
+    .tab-btn[data-char="ironclad"].active    { background: var(--ironclad);    color: #fff; box-shadow: 0 0 16px rgba(192,57,43,0.5); }
+    .tab-btn[data-char="silent"].active      { background: var(--silent);      color: #fff; box-shadow: 0 0 16px rgba(46,204,113,0.4); }
+    .tab-btn[data-char="defect"].active      { background: var(--defect);      color: #fff; box-shadow: 0 0 16px rgba(52,152,219,0.4); }
+    .tab-btn[data-char="regent"].active      { background: var(--regent);      color: #111; box-shadow: 0 0 16px rgba(212,175,55,0.5); }
+    .tab-btn[data-char="necrobinder"].active { background: var(--necrobinder); color: #fff; box-shadow: 0 0 16px rgba(155,89,182,0.5); }
+
+    /* ── Content ── */
+    .content {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 3rem;
+    }
+
+    .char-panel { display: none; }
+    .char-panel.active { display: block; }
+
+    .char-header {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+      padding-bottom: 0.9rem;
+      border-bottom: 1px solid #2a2840;
+    }
+
+    .char-header h2 {
+      font-size: 1.7rem;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+    }
+
+    .source-link {
+      margin-left: auto;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      text-decoration: none;
+      border: 1px solid #333;
+      border-radius: 3px;
+      padding: 0.2rem 0.55rem;
+      transition: color 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+    .source-link:hover { color: var(--text); border-color: #666; }
+
+    /* ── Tier rows ── */
+    .tier-row {
+      display: flex;
+      align-items: stretch;
+      margin-bottom: 6px;
+      border-radius: 5px;
+      overflow: hidden;
+      background: var(--bg-card);
+    }
+
+    .tier-label {
+      width: 50px;
+      min-width: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-weight: 900;
+      letter-spacing: 0;
+      user-select: none;
+    }
+
+    .tier-row[data-tier="S"] .tier-label { background: var(--s-bg); color: var(--s-fg); }
+    .tier-row[data-tier="A"] .tier-label { background: var(--a-bg); color: var(--a-fg); }
+    .tier-row[data-tier="B"] .tier-label { background: var(--b-bg); color: var(--b-fg); }
+    .tier-row[data-tier="C"] .tier-label { background: var(--c-bg); color: var(--c-fg); }
+    .tier-row[data-tier="D"] .tier-label { background: var(--d-bg); color: var(--d-fg); }
+    .tier-row[data-tier="F"] .tier-label { background: var(--f-bg); color: var(--f-fg); }
+
+    .tier-cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      padding: 8px 10px;
+      align-items: center;
+    }
+
+    .card-chip {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 3px;
+      padding: 3px 8px;
+      font-size: 0.78rem;
+      color: var(--text);
+      white-space: nowrap;
+      transition: background 0.1s;
+    }
+    .card-chip:hover { background: rgba(255,255,255,0.13); }
+
+    /* Subtle left accent on card chips per tier */
+    .tier-row[data-tier="S"] .card-chip { border-left: 2px solid var(--s-bg); }
+    .tier-row[data-tier="A"] .card-chip { border-left: 2px solid var(--a-bg); }
+    .tier-row[data-tier="B"] .card-chip { border-left: 2px solid var(--b-bg); }
+    .tier-row[data-tier="C"] .card-chip { border-left: 2px solid var(--c-bg); }
+    .tier-row[data-tier="D"] .card-chip { border-left: 2px solid var(--d-bg); }
+    .tier-row[data-tier="F"] .card-chip { border-left: 2px solid var(--f-bg); }
+
+    /* ── Legend ── */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+    }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 1.5rem 1rem;
+      color: var(--text-dim);
+      font-size: 0.78rem;
+      border-top: 1px solid #1e1d2e;
+    }
+
+    footer a { color: #6aa3d5; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>⚔ STS2 Tier Lists</h1>
+  <p>Jack's collective card rankings for Slay the Spire 2</p>
+</header>
+
+<nav class="tabs" role="tablist">
+  <button class="tab-btn active" data-char="ironclad"    role="tab">Ironclad</button>
+  <button class="tab-btn"        data-char="silent"      role="tab">Silent</button>
+  <button class="tab-btn"        data-char="defect"      role="tab">Defect</button>
+  <button class="tab-btn"        data-char="regent"      role="tab">Regent</button>
+  <button class="tab-btn"        data-char="necrobinder" role="tab">Necrobinder</button>
+</nav>
+
+<main class="content">
+
+  <section class="char-panel active" id="ironclad">
+    <div class="char-header">
+      <h2 style="color:var(--ironclad)">Ironclad</h2>
+      <a class="source-link" href="https://www.reddit.com/r/slaythespire/comments/1rpalzy/a10_sts_2_ironclad_tierlist_from_a_64_winrate/" target="_blank" rel="noopener">Source ↗</a>
+    </div>
+  </section>
+
+  <section class="char-panel" id="silent">
+    <div class="char-header">
+      <h2 style="color:var(--silent)">Silent</h2>
+      <a class="source-link" href="https://nat1gaming.com/sts2/tier-list/silent-card-tier-list/" target="_blank" rel="noopener">Source ↗</a>
+    </div>
+  </section>
+
+  <section class="char-panel" id="defect">
+    <div class="char-header">
+      <h2 style="color:var(--defect)">Defect</h2>
+      <a class="source-link" href="https://nat1gaming.com/sts2/tier-list/defect-card-tier-list/" target="_blank" rel="noopener">Source ↗</a>
+    </div>
+  </section>
+
+  <section class="char-panel" id="regent">
+    <div class="char-header">
+      <h2 style="color:var(--regent)">Regent</h2>
+      <a class="source-link" href="https://unduel.com/t/slay-the-spire-2/regent-cards-sts2-5kymfezXw4zw5TdyHf4bQk/tier-list" target="_blank" rel="noopener">Source ↗</a>
+    </div>
+  </section>
+
+  <section class="char-panel" id="necrobinder">
+    <div class="char-header">
+      <h2 style="color:var(--necrobinder)">Necrobinder</h2>
+      <a class="source-link" href="https://tiermaker.com/categories/waifus/necrobinder-cards-slay-the-spire-ii-19230513-2" target="_blank" rel="noopener">Source ↗</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Not affiliated with Mega Crit &mdash; just a fun side page &nbsp;|&nbsp; <a href="/">← Jack's Resume</a></p>
+</footer>
+
+<script>
+const DATA = {
+  ironclad: {
+    S: ["Barricade","Brand","Break","Burning Pact","Cascade","Corruption","Crimson Mantle","Dark Embrace","Demon Form","Demonic Shield","Drum of Battle","Evil Eye","Feel No Pain","Fiend Fire","Flame Barrier","Howl from Beyond","Impervious","Offering","Pact's End","Rupture","Second Wind","Spite","Stoke","Taunt","Tear Asunder","Thrash","Vicious","Whirlwind"],
+    A: ["Ashen Strike","Blood Wall","Colossus","Dominate","Feed","Fight Me!","Forgotten Ritual","Hellraiser","Inferno","Inflame","Mangle","Not Yet","Rage","Shrug It Off","Stone Armor","True Grit","Uppercut"],
+    B: ["Aggression","Armaments","Battle Trance","Bludgeon","Body Slam","Bully","Cinder","Conflagration","Cruelty","Dismantle","Havoc","Hemokinesis","Iron Wave","One-Two Punch","Primal Force","Setup Strike","Sword Boomerang","Tank","Twin Strike"],
+    C: ["Bloodletting","Breakthrough","Expect a Fight","Infernal Blade","Juggernaut","Juggling","Molten Fist","Pillage","Pommel Strike","Pyre","Rampage","Stomp","Thunderclap","Tremble","Unmovable","Unrelenting"],
+    D: ["Anger","Bash","Defend","Headbutt","Perfected Strike","Stampede","Strike"],
+  },
+  silent: {
+    S: ["Abrasive","Acrobatics","Bullet Time","Calculated Gamble","Corrosive Wave","Hand Trick","Haze","Leg Sweep","Malaise","Murder","Nightmare","Reflex","Shadow Step","Skewer","Sneaky","Storm of Steel","Suppress","Tactician","Tools of the Trade"],
+    A: ["Adrenaline","Afterimage","Assassinate","Blur","Bouncing Flask","Bubble Bubble","Dagger Throw","Dash","Envenom","Escape Plan","Grand Finale","Hidden Daggers","Master Planner","Memento Mori","Mirage","Noxious Fumes","Outbreak","Prepared","Ricochet","Serpent Form","Snakebite","Untouchable","Wraith Form"],
+    B: ["Accelerant","Backflip","Blade of Ink","Burst","Deadly Poison","Echoing Slash","Expose","Flick-Flack","Follow Through","Footwork","Knife Trap","Phantom Blades","Poisoned Stab","Predator","Shadowmeld","Speedster","Survivor","The Hunt","Well-Laid Plans"],
+    C: ["Accuracy","Anticipate","Backstab","Cloak and Dagger","Dagger Spray","Deflect","Dodge and Roll","Expertise","Fan of Knives","Finisher","Flanking","Flechettes","Infinite Blades","Pinpoint","Pounce","Precise Cut","Strangle","Sucker Punch","Tracking","Up My Sleeve"],
+    D: ["Blade Dance","Defend","Leading Strike","Neutralize","Piercing Wail","Slice","Strike"],
+  },
+  defect: {
+    S: ["Biased Cognition","Bulk Up","Consuming Shadow","Coolant","Defragment","Echo Form","Fight Through","Flak Cannon","Fusion","Glacier","Hyperbeam","Ice Lance","Ignition","Meteor Strike","Modded","Multi-Cast","Null","Overclock","Quadcast","Rainbow","Refract","Shadow Shield","Shatter","Voltaic"],
+    A: ["Boost Away","Boot Sequence","Capacitor","Chill","Compile Driver","Coolheaded","Creative AI","Darkness","Genetic Algorithm","Iteration","Lightning Rod","Machine Learning","Reboot","Rocket Punch","Scrape","Storm","Sunder","Synchronize","Tempest","Thunder","Trash to Treasure"],
+    B: ["Adaptive Strike","All for One","Ball Lightning","Barrage","Cold Snap","Compact","Focused Strike","FTL","Glasswork","Helix Drill","Hotfix","Scavenge","Signal Boost","Skim","Smokestack","Spinner","Supercritical","TURBO"],
+    C: ["Beam Cell","Buffer","Chaos","Charge Battery","Double Energy","Dualcast","Energy Surge","Go for the Eyes","Gunk Up","Hailstorm","Hologram","Leap","Loop","Subroutine","Sweeping Beam","Synthesis","Tesla Coil","Uproar","White Noise","Zap"],
+    D: ["Claw","Defend","Feral","Momentum Strike","Strike"],
+  },
+  regent: {
+    S: ["The Sealed Throne","Big Bang"],
+    A: ["Reflect","Void Form","Meteor Shower","Bulwark","GUARDS!!!","Child of the Stars","Particle Wall","Tyranny","CHARGE!!","Comet"],
+    B: ["Astral Pulse","Pillar of Creation","Arsenal","Gamma Blast","Royal Gamble","Orbit","Spectrum Shift","Glow","Crash Landing","Convergence","Make It So","The Smith","Decisions, Decisions","Bombardment","Hidden Cache","Gather Light","Dying Star","Manifest Authority","Cloak of Stars","BEGONE!","Summon Forth","Genesis","Sword Sage","Quasar"],
+    C: ["Know Thy Place","Stardust","Collision Course","Cosmic Indifference","Seeking Edge","Glitterstream","Bundle of Joy","Supermassive","Foregone Conclusion","Radiate","Parry","Black Hole","Patter","Seven Stars","Heavenly Drill","Kingly Kick","I Am Invincible","Alignment","Glimmer","Guiding Star","Royalties","Crush Under","Pale Blue Dot"],
+    D: ["Refine Blade","Spoils of Battle","Largesse","Photon Cut","Furnace","Kingly Punch","Shining Strike","Devastate","Beat into Shape","Hammer Time","Conqueror","Wrought in War","Hegemony","Solar Strike","Neutron Aegis","Celestial Might","Crescent Spear"],
+    F: ["Heirloom Hammer","Terraforming","Knockout Blow","Monologue","Lunar Blast","Monarch's Gaze","Prophesize","Resonance"],
+  },
+  necrobinder: {
+    S: ["Bone Shards","Capture Spirit","Cleanse","Demesne","Devour Life","Dirge","Eidolon","Eradicate","Fetch","Glimpse Beyond","Melancholy","Necro Mastery","Protector","Rattle","Reanimate","Sacrifice","Seance","Severance","Spirit of Ash","Spur","Squeeze"],
+    A: ["Banshee's Cry","Calcify","Delay","End of Days","Grave Warden","High Five","Legion of Bone","Neurosurge","Pagestorm","Parse","Pull Aggro","Putrefy","Reave","Right Hand Hand","Sic 'Em","Snap","Soul Storm","Undeath"],
+    B: ["Afterlife","Bury","Call of the Void","Danse Macabre","Death's Door","Debilitate","Defy","Enfeebling Touch","Fear","Flatten","Forbidden Grimoire","Hang","Invoke","Lethality","Misery","Oblivion","Poke","Pull from Below","Reap","Reaper Form","Sculpting Strike","Shared Fate","Shroud","The Scythe","Time's Up","Transfigure"],
+    C: ["Bodyguard","Borrowed Time","Countdown","Death March","Deathbringer","Defile","Dredge","Friendship","Haunt","Negative Pulse","No Escape","Scourge","Sentry Mode","Sow","Unleash","Veilpiercer"],
+    D: ["Blight Strike","Defend","Drain Power","Graveblast","Sleight of Flesh","Strike","Wisp"],
+  },
+};
+
+// Build tier rows for each character panel
+Object.entries(DATA).forEach(([char, tiers]) => {
+  const panel = document.getElementById(char);
+
+  Object.entries(tiers).forEach(([tier, cards]) => {
+    const row = document.createElement('div');
+    row.className = 'tier-row';
+    row.dataset.tier = tier;
+
+    const label = document.createElement('div');
+    label.className = 'tier-label';
+    label.textContent = tier;
+
+    const wrap = document.createElement('div');
+    wrap.className = 'tier-cards';
+
+    cards.forEach(name => {
+      const chip = document.createElement('span');
+      chip.className = 'card-chip';
+      chip.textContent = name;
+      wrap.appendChild(chip);
+    });
+
+    row.appendChild(label);
+    row.appendChild(wrap);
+    panel.appendChild(row);
+  });
+});
+
+// Tab switching
+const btns = document.querySelectorAll('.tab-btn');
+const panels = document.querySelectorAll('.char-panel');
+
+btns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    btns.forEach(b => b.classList.remove('active'));
+    panels.forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.char).classList.add('active');
+  });
+});
+</script>
+
+</body>
+</html>
