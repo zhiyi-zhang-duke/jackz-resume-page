@@ -263,6 +263,39 @@
       pointer-events: none;
     }
 
+    /* ── Card image tooltip ── */
+    #card-tooltip {
+      position: fixed;
+      z-index: 999;
+      pointer-events: none;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      width: 196px;
+      background: #1a1929;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.7);
+    }
+
+    #card-tooltip img {
+      width: 196px;
+      height: 196px;
+      object-fit: cover;
+      display: block;
+      background: #111;
+    }
+
+    #card-tooltip .tip-name {
+      font-size: 0.72rem;
+      padding: 0.35rem 0.5rem;
+      color: var(--text);
+      text-align: center;
+      width: 100%;
+      background: #1a1929;
+    }
+
     /* ── Reset button ── */
     .reset-btn {
       font-size: 0.72rem;
@@ -349,6 +382,11 @@
 
 </main>
 
+<div id="card-tooltip">
+  <img src="" alt="" />
+  <div class="tip-name"></div>
+</div>
+
 <footer>
   <p>Not affiliated with Mega Crit &mdash; just a fun side page &nbsp;|&nbsp; <a href="/">← Jack's Resume</a></p>
 </footer>
@@ -406,6 +444,48 @@ const DATA = {
     D: ["Fasten","Anointed","Beacon of Hope","Believe in You","Eternal Armor","Gang Up","Restlessness"],
   },
 };
+
+// ── Card image CDN ────────────────────────────────────────────
+function cardImageUrl(char, name) {
+  const slug = name.toLowerCase()
+    .replace(/[^a-z0-9\s]/g, '')
+    .trim()
+    .replace(/\s+/g, '_');
+  if (char === 'relics') return `https://sts2json.untapped.gg/art/relics/${slug}.png`;
+  return `https://sts2json.untapped.gg/art/card_portraits/${char}/${slug}.png`;
+}
+
+// ── Tooltip ───────────────────────────────────────────────────
+const tooltip    = document.getElementById('card-tooltip');
+const tipImg     = tooltip.querySelector('img');
+const tipName    = tooltip.querySelector('.tip-name');
+const TIP_W = 196, TIP_H = 230, TIP_MARGIN = 14;
+
+function showTooltip(e, char, name) {
+  if (dragState) return;
+  tipName.textContent = name;
+  tipImg.style.visibility = 'hidden';
+  tipImg.onload  = () => { tipImg.style.visibility = 'visible'; };
+  tipImg.onerror = () => { tipImg.style.visibility = 'hidden'; };
+  tipImg.src = cardImageUrl(char, name);
+  tooltip.style.display = 'flex';
+  moveTooltip(e);
+}
+
+function moveTooltip(e) {
+  let x = e.clientX + TIP_MARGIN;
+  let y = e.clientY - TIP_H / 2;
+  if (x + TIP_W > window.innerWidth)  x = e.clientX - TIP_W - TIP_MARGIN;
+  if (y < 4)                           y = 4;
+  if (y + TIP_H > window.innerHeight) y = window.innerHeight - TIP_H - 4;
+  tooltip.style.left = x + 'px';
+  tooltip.style.top  = y + 'px';
+}
+
+function hideTooltip() {
+  tooltip.style.display = 'none';
+  tipImg.src = '';
+}
 
 // ── localStorage ──────────────────────────────────────────────
 const STORAGE_KEY = 'sts2-tier-state-v1';
@@ -472,6 +552,12 @@ function makeChip(name) {
   chip.draggable = true;
   chip.addEventListener('dragstart', onDragStart);
   chip.addEventListener('dragend', onDragEnd);
+  chip.addEventListener('mouseenter', e => {
+    const char = chip.closest('.tier-cards').dataset.char;
+    showTooltip(e, char, name);
+  });
+  chip.addEventListener('mousemove', moveTooltip);
+  chip.addEventListener('mouseleave', hideTooltip);
   return chip;
 }
 
