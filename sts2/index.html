@@ -238,6 +238,44 @@
 
     footer a { color: #6aa3d5; text-decoration: none; }
     footer a:hover { text-decoration: underline; }
+
+    /* ── Drag & drop ── */
+    .card-chip { cursor: grab; user-select: none; }
+    .card-chip:active { cursor: grabbing; }
+    .card-chip.is-dragging { opacity: 0.3; cursor: grabbing; }
+
+    .tier-cards.drag-over {
+      background: rgba(255,255,255,0.04);
+      outline: 2px dashed rgba(255,255,255,0.2);
+      outline-offset: -2px;
+      border-radius: 3px;
+    }
+
+    .drop-indicator {
+      display: inline-block;
+      width: 2px;
+      height: 20px;
+      background: var(--gold);
+      border-radius: 1px;
+      vertical-align: middle;
+      margin: 0 2px;
+      box-shadow: 0 0 8px var(--gold-glow);
+      pointer-events: none;
+    }
+
+    /* ── Reset button ── */
+    .reset-btn {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      background: transparent;
+      border: 1px solid #3a3a55;
+      border-radius: 3px;
+      padding: 0.18rem 0.55rem;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+    .reset-btn:hover { color: #e06c00; border-color: #e06c00; }
   </style>
 </head>
 <body>
@@ -369,43 +407,167 @@ const DATA = {
   },
 };
 
-// Build tier rows for each character panel
-Object.entries(DATA).forEach(([char, tiers]) => {
+// ── localStorage ──────────────────────────────────────────────
+const STORAGE_KEY = 'sts2-tier-state-v1';
+
+function loadAll() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+  catch { return {}; }
+}
+function saveAll(state) { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+function getCharState(char) { return loadAll()[char] || null; }
+function setCharState(char, tiers) { const a = loadAll(); a[char] = tiers; saveAll(a); }
+function clearCharState(char) { const a = loadAll(); delete a[char]; saveAll(a); }
+
+// ── Rendering ─────────────────────────────────────────────────
+function renderChar(char) {
   const panel = document.getElementById(char);
+  panel.querySelectorAll('.tier-row').forEach(r => r.remove());
 
-  Object.entries(tiers).forEach(([tier, cards]) => {
-    const row = document.createElement('div');
-    row.className = 'tier-row';
-    row.dataset.tier = tier;
+  const saved = getCharState(char);
+  const defaults = DATA[char];
+  const tierOrder = Object.keys(defaults);
 
-    const label = document.createElement('div');
-    label.className = 'tier-label';
-    label.textContent = tier;
+  const contents = saved
+    ? Object.fromEntries(tierOrder.map(t => [t, saved[t] || []]))
+    : defaults;
 
-    const wrap = document.createElement('div');
-    wrap.className = 'tier-cards';
-
-    cards.forEach(name => {
-      const chip = document.createElement('span');
-      chip.className = 'card-chip';
-      chip.textContent = name;
-      wrap.appendChild(chip);
-    });
-
-    row.appendChild(label);
-    row.appendChild(wrap);
-    panel.appendChild(row);
+  tierOrder.forEach(tier => {
+    panel.appendChild(buildRow(char, tier, contents[tier]));
   });
+
+  const btn = panel.querySelector('.reset-btn');
+  if (btn) btn.hidden = !saved;
+}
+
+function buildRow(char, tier, cards) {
+  const row = document.createElement('div');
+  row.className = 'tier-row';
+  row.dataset.tier = tier;
+
+  const label = document.createElement('div');
+  label.className = 'tier-label';
+  label.textContent = tier;
+
+  const wrap = document.createElement('div');
+  wrap.className = 'tier-cards';
+  wrap.dataset.char = char;
+  wrap.dataset.tier = tier;
+
+  (cards || []).forEach(name => wrap.appendChild(makeChip(name)));
+
+  wrap.addEventListener('dragover', onDragOver);
+  wrap.addEventListener('dragleave', onDragLeave);
+  wrap.addEventListener('drop', onDrop);
+
+  row.appendChild(label);
+  row.appendChild(wrap);
+  return row;
+}
+
+function makeChip(name) {
+  const chip = document.createElement('span');
+  chip.className = 'card-chip';
+  chip.textContent = name;
+  chip.draggable = true;
+  chip.addEventListener('dragstart', onDragStart);
+  chip.addEventListener('dragend', onDragEnd);
+  return chip;
+}
+
+// ── Drag & drop ───────────────────────────────────────────────
+let dragState = null;
+
+function onDragStart(e) {
+  dragState = { chip: this };
+  this.classList.add('is-dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', this.textContent); // required for Firefox
+}
+
+function onDragEnd() {
+  this.classList.remove('is-dragging');
+  dragState = null;
+  document.querySelectorAll('.tier-cards').forEach(w => w.classList.remove('drag-over'));
+  document.querySelectorAll('.drop-indicator').forEach(el => el.remove());
+}
+
+function onDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  const wrap = this;
+  wrap.classList.add('drag-over');
+
+  wrap.querySelectorAll('.drop-indicator').forEach(el => el.remove());
+  const indicator = document.createElement('span');
+  indicator.className = 'drop-indicator';
+  const target = insertTarget(wrap, e.clientX);
+  target ? wrap.insertBefore(indicator, target) : wrap.appendChild(indicator);
+}
+
+function onDragLeave(e) {
+  if (!this.contains(e.relatedTarget)) {
+    this.classList.remove('drag-over');
+    this.querySelectorAll('.drop-indicator').forEach(el => el.remove());
+  }
+}
+
+function onDrop(e) {
+  e.preventDefault();
+  const wrap = this;
+  wrap.classList.remove('drag-over');
+  wrap.querySelectorAll('.drop-indicator').forEach(el => el.remove());
+  if (!dragState) return;
+
+  const target = insertTarget(wrap, e.clientX);
+  target ? wrap.insertBefore(dragState.chip, target) : wrap.appendChild(dragState.chip);
+
+  persist(wrap.dataset.char);
+}
+
+function insertTarget(wrap, x) {
+  for (const chip of wrap.querySelectorAll('.card-chip:not(.is-dragging)')) {
+    const { left, width } = chip.getBoundingClientRect();
+    if (x < left + width / 2) return chip;
+  }
+  return null;
+}
+
+function persist(char) {
+  const panel = document.getElementById(char);
+  const tiers = {};
+  panel.querySelectorAll('.tier-row').forEach(row => {
+    tiers[row.dataset.tier] = [...row.querySelectorAll('.card-chip')].map(c => c.textContent);
+  });
+  setCharState(char, tiers);
+  panel.querySelector('.reset-btn').hidden = false;
+}
+
+function resetChar(char) {
+  clearCharState(char);
+  renderChar(char);
+}
+
+// ── Init ──────────────────────────────────────────────────────
+Object.keys(DATA).forEach(char => {
+  const panel = document.getElementById(char);
+  const header = panel.querySelector('.char-header');
+
+  const resetBtn = document.createElement('button');
+  resetBtn.className = 'reset-btn';
+  resetBtn.textContent = 'Reset';
+  resetBtn.hidden = true;
+  resetBtn.addEventListener('click', () => resetChar(char));
+  header.insertBefore(resetBtn, header.querySelector('.source-link'));
+
+  renderChar(char);
 });
 
 // Tab switching
-const btns = document.querySelectorAll('.tab-btn');
-const panels = document.querySelectorAll('.char-panel');
-
-btns.forEach(btn => {
+document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    btns.forEach(b => b.classList.remove('active'));
-    panels.forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.char-panel').forEach(p => p.classList.remove('active'));
     btn.classList.add('active');
     document.getElementById(btn.dataset.char).classList.add('active');
   });
