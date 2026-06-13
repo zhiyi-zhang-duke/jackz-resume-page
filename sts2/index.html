@@ -180,30 +180,60 @@
     .tier-cards {
       display: flex;
       flex-wrap: wrap;
-      gap: 5px;
+      gap: 6px;
       padding: 8px 10px;
-      align-items: center;
+      align-items: flex-start;
     }
 
     .card-chip {
-      background: rgba(255,255,255,0.07);
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      width: 78px;
+      background: rgba(255,255,255,0.06);
       border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 3px;
-      padding: 3px 8px;
-      font-size: 0.78rem;
-      color: var(--text);
-      white-space: nowrap;
-      transition: background 0.1s;
+      border-radius: 5px;
+      overflow: hidden;
+      vertical-align: top;
+      position: relative;
+      transition: transform 0.12s, box-shadow 0.12s;
     }
-    .card-chip:hover { background: rgba(255,255,255,0.13); }
+    .card-chip:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+      z-index: 2;
+    }
 
-    /* Subtle left accent on card chips per tier */
-    .tier-row[data-tier="S"] .card-chip { border-left: 2px solid var(--s-bg); }
-    .tier-row[data-tier="A"] .card-chip { border-left: 2px solid var(--a-bg); }
-    .tier-row[data-tier="B"] .card-chip { border-left: 2px solid var(--b-bg); }
-    .tier-row[data-tier="C"] .card-chip { border-left: 2px solid var(--c-bg); }
-    .tier-row[data-tier="D"] .card-chip { border-left: 2px solid var(--d-bg); }
-    .tier-row[data-tier="F"] .card-chip { border-left: 2px solid var(--f-bg); }
+    .card-chip img {
+      width: 78px;
+      height: 78px;
+      object-fit: cover;
+      display: block;
+      background: #111;
+      flex-shrink: 0;
+    }
+
+    .chip-name {
+      font-size: 0.6rem;
+      line-height: 1.25;
+      padding: 4px 4px 5px;
+      text-align: center;
+      color: var(--text);
+      word-break: break-word;
+      width: 100%;
+      min-height: 2.6em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Top accent stripe per tier */
+    .tier-row[data-tier="S"] .card-chip { border-top: 3px solid var(--s-bg); }
+    .tier-row[data-tier="A"] .card-chip { border-top: 3px solid var(--a-bg); }
+    .tier-row[data-tier="B"] .card-chip { border-top: 3px solid var(--b-bg); }
+    .tier-row[data-tier="C"] .card-chip { border-top: 3px solid var(--c-bg); }
+    .tier-row[data-tier="D"] .card-chip { border-top: 3px solid var(--d-bg); }
+    .tier-row[data-tier="F"] .card-chip { border-top: 3px solid var(--f-bg); }
 
     /* ── Legend ── */
     .legend {
@@ -242,7 +272,7 @@
     /* ── Drag & drop ── */
     .card-chip { cursor: grab; user-select: none; }
     .card-chip:active { cursor: grabbing; }
-    .card-chip.is-dragging { opacity: 0.3; cursor: grabbing; }
+    .card-chip.is-dragging { opacity: 0.25; cursor: grabbing; transform: none; }
 
     .tier-cards.drag-over {
       background: rgba(255,255,255,0.04);
@@ -252,48 +282,16 @@
     }
 
     .drop-indicator {
-      display: inline-block;
-      width: 2px;
-      height: 20px;
+      display: inline-flex;
+      align-self: stretch;
+      width: 3px;
+      min-height: 90px;
       background: var(--gold);
-      border-radius: 1px;
-      vertical-align: middle;
-      margin: 0 2px;
+      border-radius: 2px;
+      margin: 0 1px;
       box-shadow: 0 0 8px var(--gold-glow);
       pointer-events: none;
-    }
-
-    /* ── Card image tooltip ── */
-    #card-tooltip {
-      position: fixed;
-      z-index: 999;
-      pointer-events: none;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      width: 196px;
-      background: #1a1929;
-      border: 1px solid rgba(255,255,255,0.14);
-      border-radius: 6px;
-      overflow: hidden;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.7);
-    }
-
-    #card-tooltip img {
-      width: 196px;
-      height: 196px;
-      object-fit: cover;
-      display: block;
-      background: #111;
-    }
-
-    #card-tooltip .tip-name {
-      font-size: 0.72rem;
-      padding: 0.35rem 0.5rem;
-      color: var(--text);
-      text-align: center;
-      width: 100%;
-      background: #1a1929;
+      flex-shrink: 0;
     }
 
     /* ── Reset button ── */
@@ -382,11 +380,6 @@
 
 </main>
 
-<div id="card-tooltip">
-  <img src="" alt="" />
-  <div class="tip-name"></div>
-</div>
-
 <footer>
   <p>Not affiliated with Mega Crit &mdash; just a fun side page &nbsp;|&nbsp; <a href="/">← Jack's Resume</a></p>
 </footer>
@@ -455,38 +448,6 @@ function cardImageUrl(char, name) {
   return `https://sts2json.untapped.gg/art/card_portraits/${char}/${slug}.png`;
 }
 
-// ── Tooltip ───────────────────────────────────────────────────
-const tooltip    = document.getElementById('card-tooltip');
-const tipImg     = tooltip.querySelector('img');
-const tipName    = tooltip.querySelector('.tip-name');
-const TIP_W = 196, TIP_H = 230, TIP_MARGIN = 14;
-
-function showTooltip(e, char, name) {
-  if (dragState) return;
-  tipName.textContent = name;
-  tipImg.style.visibility = 'hidden';
-  tipImg.onload  = () => { tipImg.style.visibility = 'visible'; };
-  tipImg.onerror = () => { tipImg.style.visibility = 'hidden'; };
-  tipImg.src = cardImageUrl(char, name);
-  tooltip.style.display = 'flex';
-  moveTooltip(e);
-}
-
-function moveTooltip(e) {
-  let x = e.clientX + TIP_MARGIN;
-  let y = e.clientY - TIP_H / 2;
-  if (x + TIP_W > window.innerWidth)  x = e.clientX - TIP_W - TIP_MARGIN;
-  if (y < 4)                           y = 4;
-  if (y + TIP_H > window.innerHeight) y = window.innerHeight - TIP_H - 4;
-  tooltip.style.left = x + 'px';
-  tooltip.style.top  = y + 'px';
-}
-
-function hideTooltip() {
-  tooltip.style.display = 'none';
-  tipImg.src = '';
-}
-
 // ── localStorage ──────────────────────────────────────────────
 const STORAGE_KEY = 'sts2-tier-state-v1';
 
@@ -515,6 +476,9 @@ function renderChar(char) {
   tierOrder.forEach(tier => {
     panel.appendChild(buildRow(char, tier, contents[tier]));
   });
+
+  // Resolve images for all tier-cards in this panel
+  panel.querySelectorAll('.tier-cards').forEach(resolveChipImages);
 
   const btn = panel.querySelector('.reset-btn');
   if (btn) btn.hidden = !saved;
@@ -548,17 +512,35 @@ function buildRow(char, tier, cards) {
 function makeChip(name) {
   const chip = document.createElement('span');
   chip.className = 'card-chip';
-  chip.textContent = name;
   chip.draggable = true;
+
+  const img = document.createElement('img');
+  img.alt = name;
+  img.loading = 'lazy';
+  img.draggable = false;
+  // src set after chip is inserted so dataset.char is available
+  chip._pendingName = name;
+
+  const label = document.createElement('span');
+  label.className = 'chip-name';
+  label.textContent = name;
+
+  chip.appendChild(img);
+  chip.appendChild(label);
   chip.addEventListener('dragstart', onDragStart);
   chip.addEventListener('dragend', onDragEnd);
-  chip.addEventListener('mouseenter', e => {
-    const char = chip.closest('.tier-cards').dataset.char;
-    showTooltip(e, char, name);
-  });
-  chip.addEventListener('mousemove', moveTooltip);
-  chip.addEventListener('mouseleave', hideTooltip);
   return chip;
+}
+
+function resolveChipImages(wrap) {
+  const char = wrap.dataset.char;
+  wrap.querySelectorAll('.card-chip').forEach(chip => {
+    const img = chip.querySelector('img');
+    if (img && !img.src && chip._pendingName) {
+      img.src = cardImageUrl(char, chip._pendingName);
+      img.onerror = () => { img.style.display = 'none'; };
+    }
+  });
 }
 
 // ── Drag & drop ───────────────────────────────────────────────
@@ -608,6 +590,7 @@ function onDrop(e) {
   const target = insertTarget(wrap, e.clientX);
   target ? wrap.insertBefore(dragState.chip, target) : wrap.appendChild(dragState.chip);
 
+  resolveChipImages(wrap);
   persist(wrap.dataset.char);
 }
 
