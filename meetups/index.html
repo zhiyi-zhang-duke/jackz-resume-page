@@ -27,14 +27,17 @@
   nav.top a:hover, nav.top a.here { color: var(--clay-deep); }
 
   /* hero */
-  .hero { background: var(--clay); color: #fff; padding: 72px 0 64px; position: relative; overflow: hidden; }
+  .hero { color: #fff; padding: 88px 0 72px; position: relative; overflow: hidden;
+    background: linear-gradient(100deg, rgba(184,92,60,.94) 0%, rgba(217,119,87,.82) 45%, rgba(31,42,68,.72) 100%), url("photos/aug-qa-room.jpg") center 40% / cover no-repeat; }
+  .hero .wrap { position: relative; z-index: 1; }
+  .hero h1, .hero p, .hero .stats { text-shadow: 0 1px 2px rgba(0,0,0,.18); }
   .hero .eyebrow { text-transform: uppercase; letter-spacing: .14em; font-size: 12px; opacity: .85; margin-bottom: 14px; }
   .hero h1 { font-size: clamp(42px, 7vw, 84px); line-height: .98; font-weight: 400; max-width: 12ch; }
   .hero p { max-width: 52ch; font-size: 18px; margin-top: 22px; opacity: .95; }
   .hero .stats { display: flex; gap: 40px; margin-top: 40px; flex-wrap: wrap; }
   .hero .stats div b { display: block; font-family: Fraunces, serif; font-size: 34px; font-weight: 400; line-height: 1; }
   .hero .stats div span { font-size: 13px; opacity: .85; }
-  .hero .globe { position: absolute; right: -60px; top: -60px; width: 360px; height: 360px; border: 1.5px solid rgba(255,255,255,.35); border-radius: 50%; }
+  .hero .globe { position: absolute; z-index: 0; right: -60px; top: -60px; width: 360px; height: 360px; border: 1.5px solid rgba(255,255,255,.35); border-radius: 50%; }
   .hero .globe::before, .hero .globe::after { content: ""; position: absolute; inset: 0; border: 1.5px solid rgba(255,255,255,.25); border-radius: 50%; }
   .hero .globe::before { transform: scaleX(.55); } .hero .globe::after { transform: scaleY(.55); }
 
