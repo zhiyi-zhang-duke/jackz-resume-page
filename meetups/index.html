@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Community Durham</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --clay: #d97757; --clay-deep: #b85c3c; --cream: #f4efe6; --paper: #fbf8f2;
+    --ink: #1c1b1a; --ink-2: #4d4a45; --ink-3: #8a857c; --line: #e4dccf; --navy: #1f2a44;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--cream); color: var(--ink); font-family: Inter, system-ui, sans-serif; line-height: 1.55; }
+  h1, h2, h3, .serif { font-family: Fraunces, Georgia, serif; font-weight: 600; letter-spacing: -0.01em; }
+  a { color: inherit; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+  /* top nav */
+  nav.top { display: flex; justify-content: space-between; align-items: center; padding: 18px 0; font-size: 14px; }
+  nav.top .brand { display: flex; gap: 10px; align-items: center; font-weight: 600; }
+  nav.top .brand span.star { color: var(--clay); font-size: 20px; }
+  nav.top a { text-decoration: none; color: var(--ink-2); }
+  nav.top .links { display: flex; gap: 20px; }
+  nav.top a:hover, nav.top a.here { color: var(--clay-deep); }
+
+  /* hero */
+  .hero { background: var(--clay); color: #fff; padding: 72px 0 64px; position: relative; overflow: hidden; }
+  .hero .eyebrow { text-transform: uppercase; letter-spacing: .14em; font-size: 12px; opacity: .85; margin-bottom: 14px; }
+  .hero h1 { font-size: clamp(42px, 7vw, 84px); line-height: .98; font-weight: 400; max-width: 12ch; }
+  .hero p { max-width: 52ch; font-size: 18px; margin-top: 22px; opacity: .95; }
+  .hero .stats { display: flex; gap: 40px; margin-top: 40px; flex-wrap: wrap; }
+  .hero .stats div b { display: block; font-family: Fraunces, serif; font-size: 34px; font-weight: 400; line-height: 1; }
+  .hero .stats div span { font-size: 13px; opacity: .85; }
+  .hero .globe { position: absolute; right: -60px; top: -60px; width: 360px; height: 360px; border: 1.5px solid rgba(255,255,255,.35); border-radius: 50%; }
+  .hero .globe::before, .hero .globe::after { content: ""; position: absolute; inset: 0; border: 1.5px solid rgba(255,255,255,.25); border-radius: 50%; }
+  .hero .globe::before { transform: scaleX(.55); } .hero .globe::after { transform: scaleY(.55); }
+
+  /* tabs */
+  .tabs { position: sticky; top: 0; z-index: 5; background: var(--cream); border-bottom: 1px solid var(--line); }
+  .tabs .wrap { display: flex; gap: 6px; overflow-x: auto; }
+  .tab { appearance: none; background: none; border: 0; border-bottom: 3px solid transparent; padding: 18px 16px 14px; cursor: pointer; font: inherit; font-size: 15px; color: var(--ink-3); white-space: nowrap; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
+  .tab small { font-size: 11px; text-transform: uppercase; letter-spacing: .1em; }
+  .tab b { font-weight: 600; color: var(--ink-2); }
+  .tab.active { border-bottom-color: var(--clay); color: var(--ink); }
+  .tab.active b { color: var(--clay-deep); }
+  .tab.upcoming small { color: var(--clay-deep); }
+
+  /* panels */
+  .panel { display: none; padding: 56px 0 80px; }
+  .panel.active { display: block; }
+  .panel-head { display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: end; margin-bottom: 48px; }
+  .panel-head h2 { font-size: clamp(34px, 4.5vw, 52px); line-height: 1.05; font-weight: 400; }
+  .panel-head .meta { color: var(--ink-2); font-size: 15px; }
+  .panel-head .meta dt { text-transform: uppercase; letter-spacing: .12em; font-size: 11px; color: var(--ink-3); margin-top: 12px; }
+  .panel-head .lede { margin-top: 16px; font-size: 17px; color: var(--ink-2); max-width: 56ch; }
+
+  section.block { margin-top: 56px; }
+  .label { text-transform: uppercase; letter-spacing: .14em; font-size: 12px; color: var(--clay-deep); font-weight: 600; margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+  .label::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+
+  /* agenda strip */
+  .agenda { display: flex; gap: 0; overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); }
+  .agenda div { flex: 1 0 140px; padding: 16px 18px; border-right: 1px solid var(--line); font-size: 14px; }
+  .agenda div:last-child { border-right: 0; }
+  .agenda b { display: block; font-family: Fraunces, serif; font-weight: 600; font-size: 18px; color: var(--clay-deep); }
+
+  /* talk cards */
+  .talks { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+  .talk { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 26px; display: flex; flex-direction: column; gap: 12px; }
+  .talk.featured { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1.4fr; gap: 32px; }
+  .talk .who { display: flex; gap: 14px; align-items: center; }
+  .talk .avatar { width: 52px; height: 52px; border-radius: 50%; background: var(--navy); color: #fff; display: grid; place-items: center; font-family: Fraunces, serif; font-size: 20px; flex-shrink: 0; }
+  .talk .who b { display: block; font-size: 16px; }
+  .talk .who span { font-size: 13px; color: var(--ink-3); }
+  .talk h3 { font-size: 24px; line-height: 1.15; }
+  .talk p { font-size: 15px; color: var(--ink-2); }
+  .talk ul { padding-left: 18px; font-size: 15px; color: var(--ink-2); display: grid; gap: 6px; }
+  .talk .pull { font-family: Fraunces, serif; font-size: 21px; line-height: 1.3; color: var(--ink); border-left: 3px solid var(--clay); padding-left: 16px; margin: 6px 0; }
+  .talk .link { font-size: 13px; color: var(--clay-deep); margin-top: auto; }
+  .talk .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 6px; }
+  .talk .steps div { background: var(--cream); border-radius: 8px; padding: 10px; font-size: 13px; }
+  .talk .steps div b { display: block; font-family: Fraunces, serif; font-size: 20px; color: var(--clay-deep); }
+  .numbers { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 4px; }
+  .numbers div b { display: block; font-family: Fraunces, serif; font-size: 28px; font-weight: 400; line-height: 1; color: var(--navy); }
+  .numbers div span { font-size: 12px; color: var(--ink-3); }
+
+  /* four questions */
+  .four { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+  .four div { background: var(--navy); color: #fff; border-radius: 14px; padding: 22px; min-height: 170px; }
+  .four div small { font-family: Fraunces, serif; font-size: 30px; color: var(--clay); display: block; line-height: 1; margin-bottom: 10px; }
+  .four div b { display: block; font-size: 16px; margin-bottom: 8px; }
+  .four div p { font-size: 13.5px; opacity: .8; }
+
+  /* takeaways */
+  .takeaways { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+  .takeaways div { border-top: 2px solid var(--clay); padding-top: 12px; font-size: 15px; color: var(--ink-2); }
+  .takeaways div b { color: var(--ink); display: block; margin-bottom: 4px; }
+
+  /* photos */
+  .photos { display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 220px 220px; gap: 10px; }
+  .photos img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; display: block; }
+  .photos img:first-child { grid-row: 1 / 3; }
+  .photos img:nth-child(4) { grid-column: 2 / 4; }
+
+  /* news chips */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { background: var(--paper); border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; font-size: 13.5px; }
+
+  /* upcoming */
+  .events { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+  .event { background: var(--navy); color: #fff; border-radius: 14px; padding: 28px; }
+  .event .date { font-family: Fraunces, serif; font-size: 30px; font-weight: 400; color: var(--clay); line-height: 1; }
+  .event h3 { margin-top: 10px; font-size: 22px; }
+  .event p { margin-top: 8px; opacity: .85; font-size: 15px; }
+  .event .cta { display: inline-block; margin-top: 18px; background: var(--clay); color: #fff; text-decoration: none; padding: 9px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; }
+
+  footer { border-top: 1px solid var(--line); padding: 32px 0 48px; font-size: 13px; color: var(--ink-3); }
+
+  @media (max-width: 760px) {
+    .panel-head, .talk.featured { grid-template-columns: 1fr; }
+    .photos { grid-template-columns: 1fr 1fr; grid-template-rows: 180px 180px 180px; }
+    .photos img:first-child { grid-row: auto; grid-column: 1 / 3; }
+    .photos img:nth-child(4) { grid-column: auto; }
+    .talk .steps { grid-template-columns: 1fr 1fr; }
+    .hero .globe { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav class="top">
+    <div class="brand"><span class="star">✳</span> Claude Community · Durham</div>
+    <div class="links"><a href="./" class="here">Meetups</a><a href="faq.html">FAQ</a><a href="../">← jack zhang</a></div>
+  </nav>
+</div>
+
+<header class="hero">
+  <div class="globe"></div>
+  <div class="wrap">
+    <div class="eyebrow">Claude Ambassador · Research Triangle, NC</div>
+    <h1>Hello, Durham.</h1>
+    <p>A monthly room at American Underground for people building with Claude: lightning talks, a news roundup, food, and the hard questions nobody has answers to yet. Hosted by Jack Zhang.</p>
+    <div class="stats">
+      <div><b>2</b><span>meetups so far</span></div>
+      <div><b>4</b><span>lightning talks</span></div>
+      <div><b>~40</b><span>people in the room</span></div>
+      <div><b>Sep 30</b><span>next: Build Day</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="tabs">
+  <div class="wrap">
+    <button class="tab active" data-tab="sep"><small>Sep 16, 2026</small><b>Lightning Talks</b></button>
+    <button class="tab" data-tab="aug"><small>Aug 5, 2026</small><b>Launch Night</b></button>
+    <button class="tab upcoming" data-tab="next"><small>Upcoming</small><b>Build Day &amp; Workshop</b></button>
+  </div>
+</div>
+
+<!-- ============ SEPTEMBER ============ -->
+<section class="panel active" id="sep">
+  <div class="wrap">
+    <div class="panel-head">
+      <div>
+        <h2>Three builders, three lightning talks.</h2>
+        <p class="lede">Round two added a news roundup and a lightning talk format: a dementia screener built from medical literature, an app un-slopped by adversarial agents, and an AI-powered second brain.</p>
+      </div>
+      <dl class="meta">
+        <dt>When</dt><dd>Wednesday, September 16, 2026</dd>
+        <dt>Where</dt><dd>American Underground, Durham</dd>
+        <dt>Format</dt><dd>Intros · News roundup · Lightning talks · Q&amp;A · Networking</dd>
+      </dl>
+    </div>
+
+    <section class="block">
+      <div class="label">News roundup</div>
+      <div class="chips">
+        <span class="chip">Jacob Coxon resigns from Anthropic</span>
+        <span class="chip">Anthropic ships invisible watermarking</span>
+        <span class="chip">Fable 5.1</span>
+        <span class="chip">GPT 6 Astra</span>
+        <span class="chip">Gemini 3.8 Flash</span>
+        <span class="chip">Muse Spark</span>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="label">Lightning talks</div>
+      <div class="talks">
+
+        <div class="talk featured">
+          <div>
+            <div class="who"><div class="avatar">W</div><div><b>Wayan Vota</b><span>AI Explorer · 25 years in nonprofit tech, ex-USAID</span></div></div>
+            <h3 style="margin-top:16px">Building a dementia screener with Claude Cowork and medical literature</h3>
+            <p style="margin-top:10px">A free, three-gate cognitive screening protocol built from validated instruments (SLUMS, IQCODE, ACE-III, SAGE). Caregivers run it at home in about 20 minutes and get a clinician-ready handoff packet. Not a diagnosis, but the start of one.</p>
+            <div class="link">First Signs Health · runs entirely in the browser, nothing leaves your device</div>
+          </div>
+          <div>
+            <div class="steps">
+              <div><b>1</b>Start with the problem</div>
+              <div><b>2</b>Educate yourself</div>
+              <div><b>3</b>Build with Claude</div>
+              <div><b>4</b>Iterate!</div>
+            </div>
+            <ul style="margin-top:14px">
+              <li>Pulled 55 PDFs from Alzheimer's Association, MoCA, and clinical guidelines into a personal reference library.</li>
+              <li>Prompted Claude as a "senior research librarian" to pick instruments on four constraints: psychometric validity, public availability, lay-administration, and coverage across triage to monitoring.</li>
+              <li>Iterated through a billing decision tool, a risk estimator, and the final screener.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="talk featured">
+          <div>
+            <div class="who"><div class="avatar">A</div><div><b>Andrew Landry</b><span>Software Engineer, Adobe (Behance, Firefly) · 11 years</span></div></div>
+            <h3 style="margin-top:16px">Un-slopping my app with adversarial agents</h3>
+            <p style="margin-top:10px">ConvoLab, a daily Japanese flashcard app, worked fine. The code was slop. Andrew rebuilt the backend using the working app as the spec, with one agent writing and Claude reviewing.</p>
+            <div class="numbers">
+              <div><b>~13</b><span>review rounds per PR</span></div>
+              <div><b>43 hrs</b><span>second pass runtime</span></div>
+              <div><b>4.3M</b><span>local-agent tokens</span></div>
+              <div><b>8.6 → 9.8</b><span>CodeScene health</span></div>
+            </div>
+            <div class="link">andrewlandry.com</div>
+          </div>
+          <div>
+            <ul>
+              <li>One concern per PR. Business logic owned by the API.</li>
+              <li>Local agent writes and fixes; Claude reviews and challenges. Repeat until reviews and checks pass.</li>
+              <li>Babysat the first ten PRs to set patterns (UUIDs, transactions, DTOs), then let the agents run for days.</li>
+              <li>Two kinds of review: CodeScene for smells and hotspots, Claude for behavior, logic, and missing tests. Merge only when the score improves.</li>
+            </ul>
+            <div class="pull">"Independent review made it workable. I still needed tests, measurement, and judgment."</div>
+          </div>
+        </div>
+
+        <div class="talk featured">
+          <div>
+            <div class="who"><div class="avatar">R</div><div><b>Ranjith</b><span>Design &amp; AI strategy, Esperia Studio · Founder, Boxes &amp; Tales</span></div></div>
+            <h3 style="margin-top:16px">Unleashing your second brain</h3>
+            <p style="margin-top:10px">Being a generalist means too many hats and a need to connect the dots, while every AI tool fights for a piece of your workflow. So Ranjith built one system, powered by AI: capture, structure, cockpit, output.</p>
+            <div class="numbers">
+              <div><b>475</b><span>notes</span></div>
+              <div><b>6,867</b><span>graph nodes</span></div>
+              <div><b>738</b><span>connections</span></div>
+              <div><b>10/42</b><span>insights promoted</span></div>
+            </div>
+          </div>
+          <div>
+            <ul>
+              <li>Every note is a node, every connection an edge. Surfacing patterns is the job.</li>
+              <li>It's not finished. It's not supposed to be. Still a continuous process.</li>
+              <li>Data, used right, is a real currency. Strategy matters as much as tools.</li>
+            </ul>
+            <div class="pull">"What am I not seeing right now that you are?" Asked live, on stage, to his own second brain.</div>
+            <p>Left the room with a question: what's the dot in your own work you haven't connected yet?</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="label">Photos</div>
+      <p style="color:var(--ink-3);font-size:14px;border:1px dashed var(--line);border-radius:10px;padding:28px;text-align:center">Group photo and event shots go here once you send them over.</p>
+    </section>
+  </div>
+</section>
+
+<!-- ============ AUGUST ============ -->
+<section class="panel" id="aug">
+  <div class="wrap">
+    <div class="panel-head">
+      <div>
+        <h2>The first Claude Community meetup in the Triangle.</h2>
+        <p class="lede">Launch night. Doors at six, food on the table, and a room full of strangers answering the same four questions about how AI actually shows up in their work.</p>
+      </div>
+      <dl class="meta">
+        <dt>When</dt><dd>Wednesday, August 5, 2026 · 6:00 to 8:00 pm</dd>
+        <dt>Where</dt><dd>American Underground, Durham</dd>
+        <dt>Format</dt><dd>Host talk · Guest talk · Q&amp;A · Your turn · Networking</dd>
+      </dl>
+    </div>
+
+    <div class="photos">
+      <img src="photos/aug-adam-talk.jpg" alt="Adam Schifferdecker presenting to the room">
+      <img src="photos/aug-jack-podium.jpg" alt="Jack Zhang opening the meetup">
+      <img src="photos/aug-room-wide.jpg" alt="The room during Q&A">
+      <img src="photos/aug-qa-room.jpg" alt="Attendees during Q&A">
+    </div>
+
+    <section class="block">
+      <div class="label">Tonight's four</div>
+      <div class="four">
+        <div><small>01</small><b>What's something cool you've built recently?</b><p>Jack: a homelab that keeps growing, local models on a 3090 next to the frontier ones, and an Instagram to second brain pipeline.</p></div>
+        <div><small>02</small><b>How does AI actually show up in your work?</b><p>Khan Academy's content platform: embeddings and semantic search, per-locale AI translation, AI sandboxing, automated PR review with human approval.</p></div>
+        <div><small>03</small><b>What do you want to know from someone else here?</b><p>One company's AI channels are great signal, but one view. How is everyone else navigating this? What's working, and what's quietly in the way?</p></div>
+        <div><small>04</small><b>What's a concern you have right now?</b><p>Cognitive surrender. Being unable to slow down. Mental exhaustion. The AI bubble.</p></div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="label">Guest talk</div>
+      <div class="talks">
+        <div class="talk featured">
+          <div>
+            <div class="who"><div class="avatar">A</div><div><b>Adam Schifferdecker</b><span>Founder, Triangle Startups</span></div></div>
+            <h3 style="margin-top:16px">1,300 agent-written commits. Now I can build as a generalist.</h3>
+            <p style="margin-top:10px">Claude Code made a software-first company possible for one person with a chemistry, health care, and strategy background.</p>
+            <div class="link">triangle-startups.com</div>
+          </div>
+          <div>
+            <ul>
+              <li>Every session starts with the same two files: AGENTS.md for how the repo works, CONTEXT.md for what the product is.</li>
+              <li>A post becomes three source-verified changes and a reviewable PR. Adam merges or rejects.</li>
+              <li>Every factual intake hits the same gate: claim, source, verification, then human review.</li>
+              <li>Where it broke: an incomplete search turned an existing startup into a "new" intake.</li>
+            </ul>
+            <div class="pull">"I didn't need a new career. I needed a way to build."</div>
+            <p><b>If you're starting this week:</b> put your rules in the repo. Say what would prove the change wrong. Keep the merge, and every irreversible action, human.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="label">Why Claude, here?</div>
+      <div class="takeaways">
+        <div><b>"Nobody knows."</b>Kent Beck on The Pragmatic Engineer: it's not just that I don't know, it's that nobody knows. That's the whole reason to get in a room.</div>
+        <div><b>Khan Academy went early</b>Partnered with OpenAI at the GPT-4 launch in 2023. Internal hackathons became core Khanmigo features. Adoption was encouraged, but ultimately organic.</div>
+        <div><b>What we asked the room</b>Meetup nights, half-day workshops, or 40 people on a hard question about AI and Durham? Weeknight at six, or Saturday brunch?</div>
+      </div>
+    </section>
+  </div>
+</section>
+
+<!-- ============ UPCOMING ============ -->
+<section class="panel" id="next">
+  <div class="wrap">
+    <div class="panel-head">
+      <div>
+        <h2>What's next.</h2>
+        <p class="lede">Two hands-on formats coming up. Bring a laptop.</p>
+      </div>
+    </div>
+    <div class="events">
+      <div class="event">
+        <div class="date">Sep 30</div>
+        <h3>Claude Build Day</h3>
+        <p>Attendees get hands on Fable 5.1, build against three challenge tracks, and share what they made.</p>
+        <a class="cta" href="#">RSVP</a>
+      </div>
+      <div class="event">
+        <div class="date">Oct 21</div>
+        <h3>Claude Workshop</h3>
+        <p>Two hours to a full day. Learn one skill or tool hands-on, with $50 per head in credits.</p>
+        <a class="cta" href="#">RSVP</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">Claude Community · Durham is a community meetup hosted by Jack Zhang as a Claude Ambassador. Not an official Anthropic event.</div>
+</footer>
+
+<script>
+  const tabs = document.querySelectorAll('.tab'), panels = document.querySelectorAll('.panel');
+  function show(id){ tabs.forEach(t=>t.classList.toggle('active',t.dataset.tab===id)); panels.forEach(p=>p.classList.toggle('active',p.id===id)); history.replaceState(null,'','#'+id); }
+  tabs.forEach(t=>t.addEventListener('click',()=>show(t.dataset.tab)));
+  if(location.hash && document.getElementById(location.hash.slice(1))) show(location.hash.slice(1));
+</script>
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Community FAQ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --clay: #d97757; --clay-deep: #b85c3c; --cream: #f4efe6; --paper: #fbf8f2;
+    --ink: #1c1b1a; --ink-2: #4d4a45; --ink-3: #8a857c; --line: #e4dccf; --navy: #1f2a44;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--cream); color: var(--ink); font-family: Inter, system-ui, sans-serif; line-height: 1.55; }
+  h1, h2, h3 { font-family: Fraunces, Georgia, serif; font-weight: 600; letter-spacing: -0.01em; }
+  a { color: inherit; }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+
+  nav.top { display: flex; justify-content: space-between; align-items: center; padding: 18px 0; font-size: 14px; }
+  nav.top .brand { display: flex; gap: 10px; align-items: center; font-weight: 600; }
+  nav.top .brand span.star { color: var(--clay); font-size: 20px; }
+  nav.top .links { display: flex; gap: 20px; }
+  nav.top a { text-decoration: none; color: var(--ink-2); }
+  nav.top a:hover, nav.top a.here { color: var(--clay-deep); }
+
+  .hero { background: var(--clay); color: #fff; padding: 56px 0 48px; }
+  .hero .eyebrow { text-transform: uppercase; letter-spacing: .14em; font-size: 12px; opacity: .85; margin-bottom: 12px; }
+  .hero h1 { font-size: clamp(38px, 6vw, 68px); line-height: 1; font-weight: 400; }
+  .hero p { max-width: 56ch; font-size: 17px; margin-top: 18px; opacity: .95; }
+
+  .searchbar { position: sticky; top: 0; z-index: 5; background: var(--cream); border-bottom: 1px solid var(--line); padding: 14px 0; }
+  .searchbar .wrap { display: flex; gap: 12px; align-items: center; }
+  .searchbar input { flex: 1; font: inherit; font-size: 16px; padding: 12px 16px 12px 42px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%238a857c' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") 14px center no-repeat; outline: none; }
+  .searchbar input:focus { border-color: var(--clay); box-shadow: 0 0 0 3px rgba(217,119,87,.18); }
+  .searchbar .count { font-size: 13px; color: var(--ink-3); white-space: nowrap; }
+
+  .letters { display: flex; flex-wrap: wrap; gap: 4px; padding: 22px 0 8px; }
+  .letters a { font-family: Fraunces, serif; font-size: 15px; text-decoration: none; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 6px; color: var(--ink-2); }
+  .letters a:hover { background: var(--paper); color: var(--clay-deep); }
+  .letters a.off { color: var(--line); pointer-events: none; }
+
+  .glossary { padding: 16px 0 80px; }
+  .group { margin-top: 36px; }
+  .group h2 { font-size: 40px; font-weight: 400; color: var(--clay); line-height: 1; margin-bottom: 8px; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+  .term { padding: 22px 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 220px 1fr; gap: 24px; }
+  .term h3 { font-size: 20px; line-height: 1.2; }
+  .term .aka { display: block; font-family: Inter, sans-serif; font-weight: 400; font-size: 12px; color: var(--ink-3); margin-top: 4px; letter-spacing: .04em; }
+  .term p { font-size: 15.5px; color: var(--ink-2); }
+  .term p + p { margin-top: 8px; }
+  .term .why { margin-top: 10px; font-size: 14px; color: var(--ink); background: var(--paper); border-left: 3px solid var(--clay); padding: 8px 12px; border-radius: 0 8px 8px 0; }
+  .term .why b { color: var(--clay-deep); }
+  .term.hidden, .group.hidden { display: none; }
+  mark { background: rgba(217,119,87,.28); color: inherit; border-radius: 2px; }
+  .empty { display: none; text-align: center; padding: 60px 0; color: var(--ink-3); }
+  .empty.show { display: block; }
+
+  footer { border-top: 1px solid var(--line); padding: 32px 0 48px; font-size: 13px; color: var(--ink-3); }
+  @media (max-width: 640px) { .term { grid-template-columns: 1fr; gap: 8px; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav class="top">
+    <div class="brand"><span class="star">✳</span> Claude Community · Durham</div>
+    <div class="links"><a href="./">Meetups</a><a href="faq.html" class="here">FAQ</a><a href="../">← jack zhang</a></div>
+  </nav>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Commonly asked questions</div>
+    <h1>The words we keep using.</h1>
+    <p>A plain-English glossary of the terms that come up at every meetup. If you heard something on stage and nodded along without knowing what it meant, it's probably here. Alphabetical, searchable, no jargon required.</p>
+  </div>
+</header>
+
+<div class="searchbar">
+  <div class="wrap">
+    <input type="search" id="q" placeholder="Search terms, e.g. tokens, context, second brain" autocomplete="off" aria-label="Search glossary">
+    <span class="count" id="count"></span>
+  </div>
+</div>
+
+<main class="wrap glossary">
+  <div class="letters" id="letters"></div>
+  <div id="groups"></div>
+  <div class="empty" id="empty">Nothing matches that. Ask it at the next meetup and we'll add it.</div>
+</main>
+
+<footer>
+  <div class="wrap">Missing a term? Bring it to the next meetup, or send it to Jack.</div>
+</footer>
+
+<script>
+const TERMS = [
+  { t: "Agent", aka: "agentic AI, AI agent",
+    d: ["A model that doesn't just answer once but works in a loop: it decides on an action, uses a tool (runs code, reads a file, searches the web), looks at the result, and decides what to do next until the job is done.",
+        "A chatbot answers a question. An agent finishes a task."],
+    w: "Almost every talk at the meetup is really about agents. Adam's 1,300 agent-written commits and Andrew's adversarial agents are both this." },
+
+  { t: "Adversarial review", aka: "adversarial agents, red teaming",
+    d: ["Having one AI write the work and a separate AI (or a separate session) try to poke holes in it before a human looks. The reviewer isn't trying to be helpful, it's trying to find what's wrong.",
+        "The two go back and forth until the reviewer runs out of complaints."],
+    w: "Andrew Landry's talk: his local agent wrote each PR, Claude challenged it, about 13 rounds per PR." },
+
+  { t: "Claude Code",
+    d: ["Anthropic's command-line tool that lets Claude work directly inside your codebase: read files, edit them, run tests, make commits. You talk to it in the terminal, it does the work in your repo.",
+        "There are also desktop app, web, and IDE versions, but the terminal is where it started."] },
+
+  { t: "CLAUDE.md", aka: "AGENTS.md, rules file",
+    d: ["A plain markdown file in your project that the agent reads at the start of every session. It's where you put the stuff you'd otherwise repeat every time: how the repo is organized, how to run tests, what not to touch, your team's conventions.",
+        "Different tools use different filenames (CLAUDE.md, AGENTS.md, .cursorrules) but the idea is the same."],
+    w: "Adam's first tip for anyone starting this week: put your rules in the repo." },
+
+  { t: "Compaction", aka: "context compression, summarization",
+    d: ["When a conversation gets too long to fit in the context window, the tool summarizes the older parts and keeps working from the summary. You lose detail but keep going.",
+        "Claude Code does this automatically. It's why a long session sometimes 'forgets' something you said an hour ago."] },
+
+  { t: "Context engineering", aka: "the successor to prompt engineering",
+    d: ["Deciding what information the model sees, in what order, and what it doesn't see. Prompt engineering was about wording a request. Context engineering is about curating everything in the window: rules files, retrieved documents, tool results, examples, conversation history.",
+        "The core insight: the model is only as good as what's in front of it. Most 'the AI is dumb' moments are actually 'the AI didn't have the right context' moments."],
+    w: "Wayan's dementia screener worked because he first loaded 55 medical PDFs and gave Claude a librarian persona. That's context engineering." },
+
+  { t: "Context length", aka: "context window, context size",
+    d: ["The maximum amount of text a model can hold in its working memory at once, measured in tokens. Everything counts against it: your system prompt, the rules file, the conversation so far, every file the agent read, every tool result.",
+        "Modern models have windows of 200K to 1M+ tokens. That sounds huge, but an agent reading a codebase can burn through it fast."],
+    w: "When someone says 'I ran out of context,' this is the limit they hit." },
+
+  { t: "Context degradation", aka: "context rot, lost in the middle",
+    d: ["The model gets measurably worse as the context window fills up, even before it's full. Instructions from early in a long conversation get followed less reliably. Details buried in the middle of a huge input get missed. The model starts repeating itself or drifting.",
+        "It's not a bug you can patch, it's how attention works. The fix is discipline: shorter sessions, fresh starts for new tasks, and keeping only what matters in the window."],
+    w: "This is why experienced people restart Claude Code sessions often instead of running one marathon chat. Small PRs, as Andrew said, gave the reviewer something it could actually inspect." },
+
+  { t: "Embeddings", aka: "vectors, semantic search",
+    d: ["A way to turn text into a list of numbers such that similar meanings end up close together. Search by meaning instead of by keyword: 'how do I cancel' finds 'refund policy' even though no words match.",
+        "This is what powers semantic search and RAG."],
+    w: "Khan Academy's content platform uses embeddings for semantic search across its library." },
+
+  { t: "Evals", aka: "evaluations, benchmarks",
+    d: ["Tests for AI behavior. A set of inputs with known good outputs, run against the model or your prompt, scored automatically. The AI equivalent of a unit test suite.",
+        "Without evals you're judging changes by vibes. With them you can tell whether a prompt tweak actually helped."] },
+
+  { t: "Hallucination", aka: "confabulation",
+    d: ["When the model states something false with full confidence: a citation that doesn't exist, an API method that was never real, a fact it invented to fill a gap.",
+        "Models don't know when they don't know. The fix is verification: make it cite sources, check its claims, or give it tools that return real data."],
+    w: "Adam's 'every factual intake hits the same gate' is a hallucination defense: claim, source, verify, then a human decides." },
+
+  { t: "Local models", aka: "open-weight models, running models locally",
+    d: ["AI models you download and run on your own hardware instead of calling a cloud API. Free per-token, private, works offline. Usually smaller and less capable than the frontier models, but improving fast.",
+        "A good GPU with lots of memory is the main requirement. Tools like Ollama make it a one-line install."],
+    w: "Jack runs local models on an RTX 3090 next to the frontier ones. Andrew's local agent burned 4.3 million tokens that would have cost real money in the cloud." },
+
+  { t: "MCP", aka: "Model Context Protocol",
+    d: ["An open standard for plugging tools into AI models. Instead of every app writing custom integrations, a tool exposes itself as an MCP server and any MCP-aware client (Claude, Cursor, your own agent) can use it.",
+        "Think USB for AI tools. Google Drive, GitHub, Slack, your database: if there's an MCP server for it, the agent can reach it."] },
+
+  { t: "Prompt caching",
+    d: ["Reusing the already-processed version of a long prompt prefix across requests so you don't pay to re-read it every time. Big rules files and document dumps get much cheaper and faster on the second call.",
+        "Mostly invisible to end users, but it's why agents can afford to re-send the whole conversation every turn."] },
+
+  { t: "RAG", aka: "Retrieval-Augmented Generation",
+    d: ["Instead of hoping the model memorized your documents, you search for the relevant chunks first (usually with embeddings) and paste them into the prompt. The model answers from what you gave it, not from training memory.",
+        "It's how 'chat with your PDFs' products work, and the standard way to give a model private or up-to-date knowledge."] },
+
+  { t: "RPI", aka: "Research, Plan, Implement",
+    d: ["A workflow for working with coding agents on anything non-trivial. Research: have the agent explore the codebase and gather what's relevant, no changes. Plan: have it write out what it intends to do, step by step, and review that. Implement: only then let it write code, following the plan.",
+        "Each phase can run in a fresh context, with the previous phase's output as a document. That sidesteps context degradation and gives you a checkpoint to catch bad ideas before they become bad code."],
+    w: "The opposite of 'just fix it' in one giant prompt. Most of the horror stories come from skipping the middle step." },
+
+  { t: "Second brain", aka: "personal knowledge management, PKM",
+    d: ["A system outside your head for capturing, connecting, and retrieving what you learn: notes, articles, ideas, meeting takeaways. Tools like Obsidian and Notion are common. The AI twist: an agent that can read the whole thing, find connections you missed, and answer questions against it.",
+        "The point isn't storage, it's retrieval and pattern-finding. A pile of notes you never revisit isn't a second brain."],
+    w: "Ranjith's talk: 475 notes, 6,867 nodes, and a live question to his own system. Jack's Instagram-to-second-brain pipeline is the same idea." },
+
+  { t: "Skills", aka: "slash commands, custom commands",
+    d: ["Reusable instruction packages you save once and invoke by name. A skill bundles the prompt, the steps, and sometimes scripts for a task you do repeatedly: 'apply to this job,' 'write a commit message,' 'audit these comments.'",
+        "In Claude Code they're markdown files with a description, triggered by typing a slash command or just describing the task."] },
+
+  { t: "Slop", aka: "AI slop, code slop",
+    d: ["Output that works but is low quality: repetitive, over-abstracted, inconsistent, obviously unreviewed. In code, it means the app runs but a rename hits one page and misses another, nothing is shared, and every fix makes it worse.",
+        "Slop happens when you accept output without reading it. The fix is review, small changes, and setting patterns early."],
+    w: "Andrew's whole talk was about un-slopping: 'The app worked. The code was slop.'" },
+
+  { t: "Software factory", aka: "agentic software development, AI-native engineering",
+    d: ["The idea that software production becomes a pipeline you design and supervise rather than code you type. Humans set the rules, define what 'done' means, and review the output. Agents do the writing, testing, and fixing, in parallel, around the clock.",
+        "The human's job shifts from author to architect and quality gate. The bottleneck becomes review and judgment, not typing speed."],
+    w: "Adam runs a one-person software company this way. Andrew's agents merged a few PRs per hour for days while he watched the first ten." },
+
+  { t: "Subagents", aka: "multi-agent, orchestration",
+    d: ["An agent that spawns other agents to handle pieces of a task, each with its own fresh context, then collects the results. Useful for parallel work (search five places at once) and for keeping the main context clean.",
+        "The parent sees only the summary, not the subagent's whole transcript. That's a feature: it's a form of context engineering."] },
+
+  { t: "System prompt",
+    d: ["The instructions the model receives before the conversation starts: who it is, how to behave, what tools it has, what rules to follow. You usually don't see it, but every product has one.",
+        "In your own agent, the system prompt plus your rules file is where most of the behavior lives."] },
+
+  { t: "Tokens",
+    d: ["The units a model reads and writes in. Not quite words, not quite characters: roughly three-quarters of a word in English, though code and other languages tokenize differently. 'Hello, Durham' is about four tokens.",
+        "Everything is priced and limited in tokens. Input tokens (what you send) are cheaper than output tokens (what the model writes). Context length is measured in tokens."],
+    w: "When Andrew says his second pass used 4.3 million tokens, that's about 3 million words of agent reading and writing." },
+
+  { t: "Tool use", aka: "function calling",
+    d: ["Letting the model call out to real functions: run a search, query a database, execute code, send an email. The model decides when to call a tool and with what arguments, the tool runs, and the result goes back into the context.",
+        "This is what turns a chatbot into an agent. Without tools, the model can only talk."] },
+
+  { t: "Vibe coding",
+    d: ["Building software by describing what you want and accepting what the AI produces, without reading the code closely. Great for prototypes, throwaway tools, and learning. Risky for anything you'll maintain or ship, because you own bugs you've never seen.",
+        "The meetup consensus: vibe code the prototype, then un-slop it before it matters."] },
+];
+
+// ---- render ----
+TERMS.sort((a, b) => a.t.localeCompare(b.t, 'en', { sensitivity: 'base' }));
+const groupsEl = document.getElementById('groups'), lettersEl = document.getElementById('letters');
+const byLetter = {};
+TERMS.forEach(x => { const L = x.t[0].toUpperCase(); (byLetter[L] ||= []).push(x); });
+const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+for (const L of 'ABCDEFGHIJKLMNOPQRSTUVWXYZ') {
+  const a = document.createElement('a'); a.textContent = L; a.href = '#' + L;
+  if (!byLetter[L]) a.className = 'off';
+  lettersEl.appendChild(a);
+  if (!byLetter[L]) continue;
+  const g = document.createElement('section'); g.className = 'group'; g.id = L;
+  g.innerHTML = `<h2>${L}</h2>` + byLetter[L].map(x => `
+    <article class="term" data-text="${esc((x.t + ' ' + (x.aka||'') + ' ' + x.d.join(' ') + ' ' + (x.w||'')).toLowerCase())}">
+      <div><h3>${esc(x.t)}${x.aka ? `<span class="aka">also: ${esc(x.aka)}</span>` : ''}</h3></div>
+      <div>${x.d.map(p => `<p>${esc(p)}</p>`).join('')}${x.w ? `<div class="why"><b>At the meetup:</b> ${esc(x.w)}</div>` : ''}</div>
+    </article>`).join('');
+  groupsEl.appendChild(g);
+}
+
+// ---- search ----
+const q = document.getElementById('q'), count = document.getElementById('count'), empty = document.getElementById('empty');
+const terms = [...document.querySelectorAll('.term')], groups = [...document.querySelectorAll('.group')];
+function clearMarks(el) { el.querySelectorAll('mark').forEach(m => m.replaceWith(m.textContent)); el.normalize(); }
+function markText(el, needle) {
+  const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT); const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  const re = new RegExp(needle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'ig');
+  nodes.forEach(n => {
+    if (!re.test(n.nodeValue)) return; re.lastIndex = 0;
+    const frag = document.createDocumentFragment(); let last = 0, m;
+    while ((m = re.exec(n.nodeValue))) { frag.append(n.nodeValue.slice(last, m.index)); const mk = document.createElement('mark'); mk.textContent = m[0]; frag.append(mk); last = m.index + m[0].length; }
+    frag.append(n.nodeValue.slice(last)); n.replaceWith(frag);
+  });
+}
+function filter() {
+  const needle = q.value.trim().toLowerCase(); let shown = 0;
+  terms.forEach(t => { clearMarks(t); const hit = !needle || t.dataset.text.includes(needle); t.classList.toggle('hidden', !hit); if (hit) { shown++; if (needle.length > 1) markText(t, needle); } });
+  groups.forEach(g => g.classList.toggle('hidden', !g.querySelector('.term:not(.hidden)')));
+  lettersEl.querySelectorAll('a').forEach(a => { const g = document.getElementById(a.textContent); a.classList.toggle('off', !g || g.classList.contains('hidden')); });
+  count.textContent = needle ? `${shown} of ${terms.length}` : `${terms.length} terms`;
+  empty.classList.toggle('show', shown === 0);
+}
+q.addEventListener('input', filter); filter();
+document.addEventListener('keydown', e => { if (e.key === '/' && document.activeElement !== q) { e.preventDefault(); q.focus(); } });
+</script>
+</body>
+</html>

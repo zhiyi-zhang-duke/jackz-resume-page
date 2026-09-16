@@ -92,6 +92,18 @@ content:
     content:
       - layout: left
         border: weak
+        title: Claude Community Durham
+        link: https://zhiyi-zhang-duke.github.io/jackz-resume-page/meetups/
+        link_text: Meetup recaps
+        additional_links:
+          - title: FAQ / Glossary
+            icon: fas fa-book
+            url: https://zhiyi-zhang-duke.github.io/jackz-resume-page/meetups/faq.html
+        description: |
+          Host and Claude Ambassador for the Triangle's Claude Community meetup at American Underground. Monthly nights with lightning talks, a news roundup, and Q&A. Recaps of each meetup plus a searchable glossary of the terms newcomers ask about most.
+
+      - layout: left
+        border: weak
         title: Promptodex
         link: https://promptodex.web.app
         link_text: promptodex.web.app
